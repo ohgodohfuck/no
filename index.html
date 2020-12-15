@@ -18,52 +18,56 @@
             }
 
             .container div{
-                margin-left: auto;
-                margin-right: auto;
+                text-align: center;
             }
+
+            .result{
+                width: 200px;
+            }
+
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
+
+            function round4(x)
+            {
+                return Math.ceil(x/4)*4;
+            }
+
+            function calculate(){
+                a = $("#acceleration").val()
+                v_end_shit = $("#speed").val()
+
+                //v_end = v_end_shit / 2.237
+                x = 1/(a * 10) * Math.pow(v_end_shit,2)
+
+                $('#output').text(round4(x))
+            }
+
             $(document).ready(function() {
                 $("#sshow").text($("#speed").val())
                 $("#ashow").text($("#acceleration").val())
+                calculate()
 
                 $("#speed").on('input', function () {
                     $("#sshow").text($("#speed").val())
+                    calculate()
                 })
 
                 $("#acceleration").on('input', function () {
                     $("#ashow").text($("#acceleration").val())
+                    calculate()
                 })
-
-                $('#go').click(function() {
-
-                    a = $("#acceleration").val()
-                    v_end_shit = $("#speed").val()
-                    v_end = v_end_shit / 2.237
-                    v = 0
-                    x = 0
-                    dt = 0.00001
-
-                    while (v < v_end) {
-                        v += a * dt
-                        x += v * dt
-                    }
-
-                    $('#output').text(Math.ceil(x))
-
-                })
-
+               
             });
         </script>
 
     </head>
     <body>
-        <div class="container">
-            <div>Speed: <input type="range" min="1" max="100" value="50" class="slider" id="speed"><span id="sshow"></span><span> mph</span></div>
-            <div>Acceleration: <input type="range" min="1" max="9" value="50" class="slider" id="acceleration"> <span id="ashow"></span><span> m/s^2</span></div>
-            <div><input id="go" type="submit" value="Calculate"></div>
-            <div>Approximately <span id="output">0</span> meters of track needed</div>
+        <div class="container" style="display:flex;justify-content:center;align-items:center;">
+            <div>Speed <input type="range" min="1" max="100" value="50" class="slider" id="speed"><div><span id="sshow"></span><span> mph</span></div></div>
+            <div>Acceleration <input type="range" min="1" max="9" value="50" class="slider" id="acceleration"> <div><span id="ashow"></span><span> m/s²</span></div></div>
+            <div class="result">Approximately <span id="output">0</span> meters of track needed</div>
         </div>
 
         <svg height="707.76pt" version="1.1" viewBox="0 0 1382.4 707.76" width="1382.4pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
