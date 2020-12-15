@@ -28,12 +28,6 @@
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-
-            function round4(x)
-            {
-                return Math.ceil(x/4)*4;
-            }
-
             function calculate(){
                 a = $("#acceleration").val()
                 v_end_shit = $("#speed").val()
@@ -41,7 +35,7 @@
                 //v_end = v_end_shit / 2.237
                 x = 1/(a * 10) * Math.pow(v_end_shit,2)
 
-                $('#output').text(round4(x))
+                $('#output').text(Math.ceil(x))
             }
 
             $(document).ready(function() {
