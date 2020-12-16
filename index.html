@@ -9,77 +9,249 @@
                 font-size: 30pt;
             }
 
-            .container{
-                background: rgb(240, 240, 240);
-                display: inline-block;
-                width: 1750px;
-                margin-left: auto;
-                margin-right: auto;
-                border: solid 3px black;
-                padding: 20px;
-                border-radius: 5px;
+            table{
+                border-collapse: collapse;
+                border: 4px solid grey;
+                width: 100%;
             }
 
-            .container div{
+            table tr{
                 text-align: center;
+                border: 3px solid grey;
+            }
+
+
+            .name{
+                width: 100px;
+                border-right: 3px solid lightgrey;
+                border-bottom: 3px solid grey;
+            }
+
+            table tr td{
+                padding: 20px;
+                background: rgb(240, 240, 240);
             }
 
             .result{
-                width: 250px;
-                margin-left: 200px;
+                width: 275px;
             }
 
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-            function calculate(){
-                
-                a = $("#acceleration").val()
-                v_end_shit = $("#speed").val()
+            // hydraulic launch
+            // drive tyre
 
-                if ($('#stype').val() == 'm') {
-                    v_end = v_end_shit
-                } else {
-                    v_end = v_end_shit / 1.609
+            function compare(type){
+                a = $("#acceleration".concat(type)).val()
+                v_end_shit = $("#speed".concat(type)).val()
+                switch (type) {
+                        case 0:
+                            if ($('#stype0').val() == 'm') {
+                                v_end = v_end_shit
+                            } else {
+                                v_end = v_end_shit / 1.609
+                            }
+            
+                            x = Math.max(1/(a * 10) * Math.pow(v_end,2),4)
+                            break;
+                        case 1:
+                            if ($('#stype1').val() == 'm') {
+                                v_end = v_end_shit * 1.609
+                            } else {
+                                v_end = v_end_shit
+                            }
+
+                            x =  Math.max(Math.pow(v_end/(21 - 0.5 * (20 - a)),2) + 9.2,20)
+                            break;
+
+                        case 2:
+                            if ($('#stype2').val() == 'm') {
+                                v_end = v_end_shit * 1.609
+                            } else {
+                                v_end = v_end_shit
+                            }
+                            
+                            x =  Math.max(Math.pow(v_end/(10.45 + (a - 5)),2) + 10.7,20)
+                            break;
+                        
+                        case 3: 
+                            if ($('#stype3').val() == 'm') {
+                                v_end = v_end_shit * 1.609
+                            } else {
+                                v_end = v_end_shit
+                            }
+                            
+                            x =  Math.pow(v_end/(11.5 + 2 * (a - 3)),2)
+                            break;
+
+                        default:
+                            x = 0
+                        break;
                 }
 
-                x = 1/(a * 10) * Math.pow(v_end,2)
-
-                $('#output').text(Math.ceil(x))
+                $('#output'.concat(type)).text(Math.ceil(x))
             }
 
-            $(document).ready(function() {
-                if ($('#stype').val() == 'm') {
-                    $('#speed').prop('max',100)
+            function calculate(type){
+                if (type == 'all'){
+                    [0,1,2,3,4].forEach(k => {
+                        compare(k)
+                    });
                 } else {
-                    $('#speed').prop('max',160)
+                    compare(type)
                 }
-                $("#sshow").text($("#speed").val())
-                $("#ashow").text($("#acceleration").val())
-                calculate()   
 
-                $('#stype').change(function (){
-                    if ($(this).val() == 'm') {
-                        $('#speed').val(Math.min(Math.ceil($('#speed').val() / 1.609),100))
-                        $('#speed').prop('max',100)
-                        $("#sshow").text($("#speed").val())
-                        calculate()
-                    } else {
-                        $('#speed').prop('max',160)
-                        $('#speed').val(Math.ceil($('#speed').val() * 1.609))
-                        $("#sshow").text($("#speed").val())
-                        calculate()
+            }
+
+            function updatelabels(startup){
+                switch (startup) {
+                    case true:
+                        if ($('#stype0').val() == 'm') {
+                            $('#speed0').prop('max',100)
+                        } else {
+                            $('#speed0').prop('max',161)
+                        }
+                        if ($('#stype1').val() == 'm') {
+                            $('#speed1').prop('max',175)
+                            $('#speed1').prop('min',40)
+                        } else {
+                            $('#speed1').prop('max',282)
+                            $('#speed1').prop('min',64)
+                        }
+                        if ($('#stype2').val() == 'm') {
+                            $('#speed2').prop('max',60)
+                            $('#speed2').prop('min',25)
+                        } else {
+                            $('#speed2').prop('max',97)
+                            $('#speed2').prop('min',40)
+                        }
+                        if ($('#stype3').val() == 'm') {
+                            $('#speed3').prop('max',70)
+                            $('#speed3').prop('min',30)
+                        } else {
+                            $('#speed3').prop('max',113)
+                            $('#speed3').prop('min',48)
+                        }
+                        if ($('#stype4').val() == 'm') {
+                            $('#speed4').prop('max',70)
+                            $('#speed4').prop('min',30)
+                        } else {
+                            $('#speed4').prop('max',113)
+                            $('#speed4').prop('min',48)
+                        }
+
+                        break;
+                    case 'm': 
+                        $('#speed0').val(Math.ceil($('#speed0').val() / 1.609))
+                        $('#speed0').prop('max',100)
+
+                        $('#speed1').val(Math.max(Math.ceil($('#speed1').val() / 1.609),40))
+                        $('#speed1').prop('min',40)
+                        $('#speed1').prop('max',175)
+                        
+                        $('#speed2').val(Math.max(Math.ceil($('#speed2').val() / 1.609),25))
+                        $('#speed2').prop('min',25)
+                        $('#speed2').prop('max',60)
+                        
+                        $('#speed3').val(Math.max(Math.ceil($('#speed3').val() / 1.609),30))
+                        $('#speed3').prop('min',30)
+                        $('#speed3').prop('max',70)
+                        
+                        $('#stype0').val(startup)
+                        $('#stype1').val(startup)
+                        $('#stype2').val(startup)
+                        $('#stype3').val(startup)
+                        break;
+                    case 'km':
+                        $('#speed0').prop('max',161)
+                        $('#speed0').val(Math.ceil($('#speed0').val() * 1.609))
+                    
+                        $('#speed1').prop('max',282)
+                        $('#speed1').prop('min',64)
+                        $('#speed1').val(Math.ceil($('#speed1').val() * 1.609))
+                        
+                        $('#speed2').prop('max',97)
+                        $('#speed2').prop('min',40)
+                        $('#speed2').val(Math.ceil($('#speed2').val() * 1.609))
+                        
+                        $('#speed3').prop('max',113)
+                        $('#speed3').prop('min',48)
+                        $('#speed3').val(Math.ceil($('#speed3').val() * 1.609))
+
+                        
+                        $('#stype0').val(startup)
+                        $('#stype1').val(startup)
+                        $('#stype2').val(startup)
+                        $('#stype3').val(startup)
+                        break;
                     }
-                });
-
-                $("#speed").on('input', function () {
-                    $("#sshow").text($("#speed").val())
-                    calculate()
+                        
+                        
+                        ['0','1','2','3','4'].forEach(k => {
+                            $('#'.concat('sshow',k)).text($('#'.concat('speed',k)).val())
+                            $('#'.concat('ashow',k)).text($('#'.concat('acceleration',k)).val())
+                        });
+                        calculate('all')   
+                    }
+                    
+                    $(document).ready(function() {
+                        // lsm - hydraulic - motorbike - tyre - (reverse freefall)
+                        updatelabels(true)                
+                        
+                        $('.stype').change(function (){
+                            console.log($(this).val())
+                            updatelabels($(this).val())
+                        });
+                        
+                $("#speed0").on('input', function () {
+                    $("#sshow0").text($("#speed0").val())
+                    calculate(0)
                 })
 
-                $("#acceleration").on('input', function () {
-                    $("#ashow").text($("#acceleration").val())
-                    calculate()
+                $("#acceleration0").on('input', function () {
+                    $("#ashow0").text($("#acceleration0").val())
+                    calculate(0)
+                })
+                
+                $("#speed1").on('input', function () {
+                    $("#sshow1").text($("#speed1").val())
+                    calculate(1)
+                })
+
+                $("#acceleration1").on('input', function () {
+                    $("#ashow1").text($("#acceleration1").val())
+                    calculate(1)
+                })
+
+                $("#speed2").on('input', function () {
+                    $("#sshow2").text($("#speed2").val())
+                    calculate(2)
+                })
+
+                $("#acceleration2").on('input', function () {
+                    $("#ashow2").text($("#acceleration2").val())
+                    calculate(2)
+                })
+
+                $("#speed3").on('input', function () {
+                    $("#sshow3").text($("#speed3").val())
+                    calculate(3)
+                })
+
+                $("#acceleration3").on('input', function () {
+                    $("#ashow3").text($("#acceleration3").val())
+                    calculate(3)
+                })
+
+                $("#speed4").on('input', function () {
+                    $("#sshow4").text($("#speed4").val())
+                    calculate(4)
+                })
+
+                $("#acceleration4").on('input', function () {
+                    $("#ashow4").text($("#acceleration4").val())
+                    calculate(4)
                 })
                
             });
@@ -87,13 +259,67 @@
 
     </head>
     <body>
-        <div style="display:flex;justify-content:center;align-items:center;">
-            <div class="container" style="display:flex;justify-content:center;align-items:center;">
-                <div><div>Speed</div><input type="range" min="1" max="200" value="50" class="slider" id="speed"><div><span id="sshow"></span><span> <select id="stype"><option value="m">mph</option><option value="km">km/h</option></select></span></div></div>
-                <div><div>Acceleration</div><input type="range" min="1" max="9" value="50" class="slider" id="acceleration"> <div><span id="ashow"></span><span> m/s²</span></div></div>
-                <div class="result">Approximately <span id="output">0</span> meters of track needed</div>
-            </div>
-        </div>
+         <table>
+            <tr>
+                <td class="name">LSM</td>
+                <td>
+                    <div><div>Speed</div><input type="range" min="1" max="200" value="50" class="slider" id="speed0"><div style="height: 50px;"><span id="sshow0"></span><span> <select class="stype" id="stype0"><option value="m">mph</option><option value="km">kph</option></select></span></div></div>
+                </td>
+                <td>
+                    <div><div>Acceleration</div><input type="range" min="5" max="9" value="50" class="slider" id="acceleration0"><div style="height: 50px;"><span id="ashow0"></span><span> m/s²</span></div></div>
+                </td>
+                <td>
+                    <div class="result">Approximately <span id="output0">0</span> meters of track needed</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">Hydraulic Launch</td>
+                <td>
+                    <div><div>Speed</div><input type="range" min="64" max="282" class="slider" id="speed1"><div style="height: 50px;"><span id="sshow1"></span><span> <select class="stype" id="stype1"><option value="m">mph</option><option value="km">kph</option></select></span></div></div>
+                </td>
+                <td>
+                    <div><div>Acceleration</div><input type="range" min="17" max="20" class="slider" id="acceleration1"><div style="height: 50px;"><span id="ashow1"></span><span> m/s²</span></div></div>
+                </td>
+                <td>
+                    <div class="result">Approximately <span id="output1">0</span> meters of track needed</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">Motorbike</td>
+                <td>
+                    <div><div>Speed</div><input type="range" min="64" max="282" class="slider" id="speed2"><div style="height: 50px;"><span id="sshow2"></span><span> <select class="stype" id="stype2"><option value="m">mph</option><option value="km">kph</option></select></span></div></div>
+                </td>
+                <td>
+                    <div><div>Acceleration</div><input type="range" min="5" max="8" class="slider" id="acceleration2"><div style="height: 50px;"><span id="ashow2"></span><span> m/s²</span></div></div>
+                </td>
+                <td>
+                    <div class="result">Approximately <span id="output2">0</span> meters of track needed</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">Launch Tyres</td>
+                <td>
+                    <div><div>Speed</div><input type="range" min="64" max="282" class="slider" id="speed3"><div style="height: 50px;"><span id="sshow3"></span><span> <select class="stype" id="stype3"><option value="m">mph</option><option value="km">kph</option></select></span></div></div>
+                </td>
+                <td>
+                    <div><div>Acceleration</div><input type="range" min="3" max="9" class="slider" id="acceleration3"><div style="height: 50px;"><span id="ashow3"></span><span> m/s²</span></div></div>
+                </td>
+                <td>
+                    <div class="result">Approximately <span id="output3">0</span> meters of track needed</div>
+                </td>
+            </tr>
+            <!--<tr>
+                <td>
+                    <div><div>Speed</div><input type="range" min="64" max="282" class="slider" id="speed4"><div style="height: 50px;"><span id="sshow4"></span><span> <select class="stype" id="stype4"><option value="m">mph</option><option value="km">kph</option></select></span></div></div>
+                </td>
+                <td>
+                    <div><div>Acceleration</div><input type="range" min="3" max="9" class="slider" id="acceleration4"><div style="height: 50px;"><span id="ashow4"></span><span> m/s²</span></div></div>
+                </td>
+                <td>
+                    <div class="result">Approximately <span id="output4">0</span> meters of track needed</div>
+                </td>
+            </tr>-->
+        </table>
           
     </body>
 </html>
