@@ -39,9 +39,6 @@
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-            // hydraulic launch
-            // drive tyre
-
             function compare(type){
                 a = $("#acceleration".concat(type)).val()
                 v_end_shit = $("#speed".concat(type)).val()
@@ -108,9 +105,9 @@
                 switch (startup) {
                     case true:
                         if ($('#stype0').val() == 'm') {
-                            $('#speed0').prop('max',100)
+                            $('#speed0').prop('max',120)
                         } else {
-                            $('#speed0').prop('max',161)
+                            $('#speed0').prop('max',193)
                         }
                         if ($('#stype1').val() == 'm') {
                             $('#speed1').prop('max',175)
@@ -144,7 +141,7 @@
                         break;
                     case 'm': 
                         $('#speed0').val(Math.ceil($('#speed0').val() / 1.609))
-                        $('#speed0').prop('max',100)
+                        $('#speed0').prop('max',120)
 
                         $('#speed1').val(Math.max(Math.ceil($('#speed1').val() / 1.609),40))
                         $('#speed1').prop('min',40)
@@ -164,7 +161,7 @@
                         $('#stype3').val(startup)
                         break;
                     case 'km':
-                        $('#speed0').prop('max',161)
+                        $('#speed0').prop('max',193)
                         $('#speed0').val(Math.ceil($('#speed0').val() * 1.609))
                     
                         $('#speed1').prop('max',282)
@@ -266,7 +263,7 @@
                     <div><div>Speed</div><input type="range" min="1" max="200" value="50" class="slider" id="speed0"><div style="height: 50px;"><span id="sshow0"></span><span> <select class="stype" id="stype0"><option value="m">mph</option><option value="km">kph</option></select></span></div></div>
                 </td>
                 <td>
-                    <div><div>Acceleration</div><input type="range" min="5" max="9" value="50" class="slider" id="acceleration0"><div style="height: 50px;"><span id="ashow0"></span><span> m/s²</span></div></div>
+                    <div><div>Acceleration</div><input type="range" min="1" max="9" value="50" class="slider" id="acceleration0"><div style="height: 50px;"><span id="ashow0"></span><span> m/s²</span></div></div>
                 </td>
                 <td>
                     <div class="result">Approximately <span id="output0">0</span> meters of track needed</div>
