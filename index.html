@@ -39,7 +39,7 @@
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-            function compare(type){
+            function compare(type,u){
                 a = $("#acceleration".concat(type)).val()
                 v_end_shit = $("#speed".concat(type)).val()
                 switch (type) {
@@ -87,16 +87,23 @@
                         break;
                 }
 
+                if (u == "f"){
+                    x *= 3.281
+                }
+
                 $('#output'.concat(type)).text(Math.ceil(x))
             }
 
             function calculate(type){
+
+                unit = $('#otype0').val()
+
                 if (type == 'all'){
                     [0,1,2,3,4].forEach(k => {
-                        compare(k)
+                        compare(k,unit)
                     });
                 } else {
-                    compare(type)
+                    compare(type,unit)
                 }
 
             }
@@ -197,9 +204,16 @@
                         updatelabels(true)                
                         
                         $('.stype').change(function (){
-                            console.log($(this).val())
                             updatelabels($(this).val())
                         });
+
+                        $('.otype').change(function(){
+                            $('#otype0').val($(this).val())
+                            $('#otype1').val($(this).val())
+                            $('#otype2').val($(this).val())
+                            $('#otype3').val($(this).val())
+                            calculate('all')
+                        })
                         
                 $("#speed0").on('input', function () {
                     $("#sshow0").text($("#speed0").val())
@@ -266,7 +280,7 @@
                     <div><div>Acceleration</div><input type="range" min="1" max="9" value="50" class="slider" id="acceleration0"><div style="height: 50px;"><span id="ashow0"></span><span> m/s²</span></div></div>
                 </td>
                 <td>
-                    <div class="result">Approximately <span id="output0">0</span> meters of track needed</div>
+                    <div class="result">Approximately <span id="output0">0</span> <select class="otype" id="otype0"><option value="f">feet</option><option value="m">meters</option></select></span> of track needed</div>
                 </td>
             </tr>
             <tr>
@@ -278,7 +292,7 @@
                     <div><div>Acceleration</div><input type="range" min="17" max="20" class="slider" id="acceleration1"><div style="height: 50px;"><span id="ashow1"></span><span> m/s²</span></div></div>
                 </td>
                 <td>
-                    <div class="result">Approximately <span id="output1">0</span> meters of track needed</div>
+                    <div class="result">Approximately <span id="output1">0</span> <select class="otype" id="otype1"><option value="f">feet</option><option value="m">meters</option></select></span> of track needed</div>
                 </td>
             </tr>
             <tr>
@@ -290,7 +304,7 @@
                     <div><div>Acceleration</div><input type="range" min="5" max="8" class="slider" id="acceleration2"><div style="height: 50px;"><span id="ashow2"></span><span> m/s²</span></div></div>
                 </td>
                 <td>
-                    <div class="result">Approximately <span id="output2">0</span> meters of track needed</div>
+                    <div class="result">Approximately <span id="output2">0</span> <select class="otype" id="otype2"><option value="f">feet</option><option value="m">meters</option></select></span> of track needed</div>
                 </td>
             </tr>
             <tr>
@@ -302,7 +316,7 @@
                     <div><div>Acceleration</div><input type="range" min="3" max="9" class="slider" id="acceleration3"><div style="height: 50px;"><span id="ashow3"></span><span> m/s²</span></div></div>
                 </td>
                 <td>
-                    <div class="result">Approximately <span id="output3">0</span> meters of track needed</div>
+                    <div class="result">Approximately <span id="output3">0</span> <select class="otype" id="otype3"><option value="f">feet</option><option value="m">meters</option></select></span> of track needed</div>
                 </td>
             </tr>
             <!--<tr>
